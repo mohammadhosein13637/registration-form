@@ -12,7 +12,7 @@ class Database
         $user = $_ENV['DB_USER'];
         $pass = $_ENV['DB_PASS'];
         $charset = $_ENV['DB_CHARSET'];
-        $dsn = 'mysql:host=$host;dbnam=$db;charset=$charset';
+        $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -20,12 +20,16 @@ class Database
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
         try {
+            
             $this->pdo = new PDO($dsn, $user, $pass, $options);
+            $stmt = $this->pdo->query("SELECT DATABASE()");
+            echo "Connected to DB: " . $stmt->fetchColumn();
         } catch (PDOException $e) {
             throw new \Exception("Database connection failed: " . $e->getMessage());
         }
     }
-    public function getConnection(){
+    public function getConnection()
+    {
         return $this->pdo;
     }
 }
